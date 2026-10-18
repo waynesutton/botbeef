@@ -1,26 +1,32 @@
 import { useState } from "react";
+import { Models } from "./Models";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { MIN_AGENT_GAMES_TO_RANK, MIN_GAMES_TO_RANK } from "../convex/config";
 import { Avatar, Link } from "./ui";
 import { secret } from "./local";
 
-type Tab = "players" | "agents" | "recent";
+type Tab = "players" | "agents" | "models" | "recent";
+const TABS: Tab[] = ["players", "agents", "models", "recent"];
+const LABEL: Record<Tab, string> = { players: "Players", agents: "Which AI wins?", models: "Models", recent: "Recent battles" };
+const initialTab = (): Tab => { const t = new URLSearchParams(location.search).get("tab") as Tab; return TABS.includes(t) ? t : "players"; };
 export function Leaderboard() {
-  const [tab, setTab] = useState<Tab>("players");
+  const [tab, setTabState] = useState<Tab>(initialTab);
+  const setTab = (t: Tab) => { setTabState(t); const u = new URL(location.href); if (t === "players") u.searchParams.delete("tab"); else u.searchParams.set("tab", t); history.replaceState(history.state, "", u); };
   const [period, setPeriod] = useState<"week" | "all">("week");
   return (
     <div className="lb">
       <h1>Leaderboard</h1>
       <div className="tabs" role="tablist">
-        {(["players", "agents", "recent"] as const).map((t) => (
-          <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? "tab on" : "tab"} onClick={() => setTab(t)}>
-            {t === "players" ? "Players" : t === "agents" ? "Which AI wins?" : "Recent battles"}
+        {TABS.map((t) => (
+          <button key={t} role="tab" aria-selected={tab === t} data-tab={t} className={tab === t ? "tab on" : "tab"} onClick={() => setTab(t)}>
+            {LABEL[t]}
           </button>
         ))}
       </div>
       {tab === "players" && <Players period={period} setPeriod={setPeriod} />}
       {tab === "agents" && <Agents />}
+      {tab === "models" && <Models />}
       {tab === "recent" && <Recent />}
     </div>
   );

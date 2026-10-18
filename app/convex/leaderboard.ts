@@ -4,7 +4,7 @@ import * as R from "./returns";
 import { v } from "convex/values";
 import { internalMutation, internalQuery, query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
-import { CHARACTERS, MIN_AGENT_GAMES_TO_RANK, MIN_GAMES_TO_RANK, POINTS, charById } from "./config";
+import { CHARACTERS, MIN_AGENT_GAMES_TO_RANK, MIN_GAMES_TO_RANK, POINTS, charById, modelFor } from "./config";
 import { dayKey, sha256, weekKey, isPublicResult } from "./lib";
 
 type Outcome = "w" | "l" | "d";
@@ -34,6 +34,12 @@ export const finish = internalMutation({
       corners: g.corners.map((c) => ({ kind: c.kind, characterId: c.characterId, name: c.name, tag: c.tag })),
       scores: a.finals, winner: a.winner,
     });
+    // Model scoreboard: one blind insert per agent corner (rolled up by models.rollup; no reads, no hot doc).
+    for (let i = 0; i < 2; i++) {
+      const c = g.corners[i];
+      if (c.kind !== "agent" || !c.characterId) continue;
+      await ctx.db.insert("modelGames", { t: now, model: modelFor(c.characterId, c.model).model, bot: c.characterId, score: a.finals[i], outcome: outcome(a.winner, i), vsHuman: g.corners[1 - i].kind === "human", logged: true, rolled: false });
+    }
     // Agents (all modes, Exhibition included).
     for (let i = 0; i < 2; i++) {
       const c = g.corners[i];

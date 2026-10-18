@@ -50,3 +50,16 @@ export const recentResult = v.array(v.object({
 }));
 export const presenceTokens = v.object({ roomToken: v.string(), sessionToken: v.string() });
 export const presenceList = v.array(v.object({ userId: v.string(), online: v.boolean(), lastDisconnected: v.number() }));
+
+const statFields = { calls: v.number(), avgMs: nOrNull, ttftMs: nOrNull, errorRate: nOrNull };
+export const modelsBoard = v.object({
+  days: v.number(), from: v.string(),
+  totals: v.object({ calls: v.number(), games: v.number(), models: v.number() }),
+  models: v.array(v.object({
+    model: v.string(), label: v.string(), provider: v.string(), speed: v.string(), isDefault: v.boolean(),
+    bots: v.array(v.object({ id: v.string(), name: v.string() })),
+    games: v.number(), wins: v.number(), losses: v.number(), draws: v.number(),
+    winPct: nOrNull, avgScore: nOrNull, costPerGame: nOrNull, ...statFields,
+  })),
+  crew: v.array(v.object({ model: v.string(), label: v.string(), role: v.string(), what: v.string(), ...statFields })),
+});

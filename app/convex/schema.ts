@@ -185,6 +185,27 @@ export default defineSchema({
   // pair = the two character ids sorted and joined with "|" (bots only; human corners are skipped).
   matchupStats: defineTable({ pair: v.string(), games: v.number(), closeSum: v.number() }).index("by_pair", ["pair"]),
 
+  // ---------- Model scoreboard (AI call visibility) ----------
+  // One blind insert per AI Gateway call (never read by hot paths). Rolled up by the models.rollup cron into
+  // modelDaily, then deleted after RAW_KEEP_DAYS by models.cleanup. No prompts or player text are stored.
+  aiCalls: defineTable({
+    t: v.number(), model: v.string(), purpose: v.string(), bot: v.optional(v.string()), gameId: v.optional(v.id("games")),
+    tin: v.optional(v.number()), tout: v.optional(v.number()), ms: v.number(), ttft: v.optional(v.number()),
+    ok: v.boolean(), err: v.optional(v.string()), usd: v.number(), rolled: v.boolean(),
+  }).index("by_t", ["t"]).index("by_rolled", ["rolled", "t"]),
+  // One blind insert per agent corner when a game finishes (leaderboard.finish), rolled into modelDaily.
+  modelGames: defineTable({
+    t: v.number(), model: v.string(), bot: v.string(), score: v.number(), outcome: v.union(v.literal("w"), v.literal("l"), v.literal("d")),
+    vsHuman: v.boolean(), logged: v.optional(v.boolean()), rolled: v.boolean(),
+  }).index("by_t", ["t"]).index("by_rolled", ["rolled", "t"]),
+  // Per model, per day, per role ("bot" answers, "judge" = Jev, "announcer" = verdict line). Single writer: the cron.
+  modelDaily: defineTable({
+    day: v.string(), model: v.string(), role: v.string(),
+    calls: v.number(), errors: v.number(), msSum: v.number(), ttftSum: v.number(), ttftN: v.number(),
+    tin: v.number(), tout: v.number(), usd: v.number(), lgames: v.optional(v.number()),
+    games: v.number(), wins: v.number(), losses: v.number(), draws: v.number(), scoreSum: v.number(),
+  }).index("by_day", ["day", "model", "role"]),
+
   // Append-only AI cost log: spend.record only inserts (no reads, so it can never OCC-conflict).
   // The spend.rollup cron folds settled rows into spend / games.costUsd / sessions.daySpend and deletes them.
   spendLog: defineTable({ t: v.number(), usd: v.number(), gameId: v.optional(v.id("games")) }).index("by_t", ["t"]),

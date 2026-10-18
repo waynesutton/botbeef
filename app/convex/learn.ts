@@ -3,10 +3,10 @@
 import { v } from "convex/values";
 import { internalQuery, type MutationCtx, type QueryCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
-import { CHALLENGES } from "./config";
+import { CHALLENGES, EXPLORE } from "./config";
 import { questionKey } from "./moderation";
 
-export const EXPLORE = 0.2; // share of picks that ignore the stats entirely
+export { EXPLORE }; // share of picks that ignore the stats entirely (config.ts)
 const SHARPNESS = 4;        // how hard quality differences pull (weight = e^(4 * quality))
 type QS = { games: number; completed: number; abandoned: number; rematches: number; closeSum: number };
 const ZERO: QS = { games: 0, completed: 0, abandoned: 0, rematches: 0, closeSum: 0 };

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { I } from "./icons";
 import { Avatar, Link } from "./ui";
 import { BOTS_DESC, GATEWAY_URL, JUDGE, JUDGE_CARD, botsList } from "../convex/bots";
+import { HowItWorks } from "./HowItWorks";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -47,8 +48,10 @@ export function Bots() {
         <h2>Where the models come from</h2>
         <p>Every bot runs on a real model from its own company, served through the <a href={GATEWAY_URL} target="_blank" rel="noopener">Convex AI Gateway <I n="out" size={12} /></a>. The swap-in models are the gateway's available models from that same family that answer fast with deep thinking off. Pick one for a single game with the small <I n="info" size={14} label="info" /> on a bot's card when you start a battle.</p>
         <p className="muted">{BOTS_DESC}</p>
-        <p><Link to="/" className="btn">Start a battle</Link></p>
+        <p className="row" style={{ gap: 8, flexWrap: "wrap" }}><Link to="/" className="btn">Start a battle</Link><Link to="/leaderboard?tab=models" className="btn ghost"><I n="chart" size={16} /> Model scoreboard</Link></p>
       </section>
+
+      <HowItWorks />
     </div>
   );
 }

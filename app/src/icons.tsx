@@ -25,6 +25,12 @@ const P: Record<string, ReactElement> = {
   expand: <path d="M160 48h48v48M96 208H48v-48M208 48l-56 56M48 208l56-56" />,
   plus: <path d="M40 128h176M128 40v176" />,
   minus: <path d="M40 128h176" />,
+  trophy: <><path d="M72 40h112v56a56 56 0 0 1-112 0Z" /><path d="M72 64H40v16a32 32 0 0 0 32 32M184 64h32v16a32 32 0 0 1-32 32M128 152v40M88 216h80M104 192h48" /></>,
+  clock: <><circle cx="128" cy="128" r="96" /><path d="M128 72v56h56" /></>,
+  target: <><circle cx="128" cy="128" r="96" /><circle cx="128" cy="128" r="56" /><circle cx="128" cy="128" r="16" /></>,
+  alert: <><path d="M114 40 24 196a16 16 0 0 0 14 24h180a16 16 0 0 0 14-24L142 40a16 16 0 0 0-28 0Z" /><path d="M128 104v48" /><circle cx="128" cy="184" r="4" fill="currentColor" /></>,
+  coin: <><circle cx="128" cy="128" r="96" /><path d="M156 96c-6-10-16-16-28-16-18 0-30 10-30 24 0 32 60 18 60 50 0 14-14 24-30 24-13 0-24-6-30-16M128 64v16M128 176v16" /></>,
+  chart: <path d="M40 216V40M40 216h176M80 176v-48M128 176V88M176 176v-80" />,
 };
 export type IconName = keyof typeof P;
 export function I({ n, size = "1em", style, className, label }: { n: IconName; size?: number | string; style?: CSSProperties; className?: string; label?: string }) {

@@ -12,6 +12,7 @@ import { go, useLocation, isEmbed } from "./nav";
 import { errMsg, secret, store } from "./local";
 import { Game } from "./Game";
 import { Leaderboard } from "./Leaderboard";
+import { useModelBoard, secs } from "./Models";
 import { Bots } from "./Bots";
 
 export function App() {
@@ -97,6 +98,8 @@ function CharPicker({ value, onChange, taken = null, random, label = "Your chara
 function ModelSheet({ id, value, onPick, onClose }: { id: string; value?: string; onPick: (model: string) => void; onClose: () => void }) {
   const c = charById(id)!, opts = modelOptions(id), cur = modelFor(id, value).model;
   const first = useRef<HTMLButtonElement>(null);
+  const board = useModelBoard(30);
+  const statOf = (m: string) => board?.models.find((x) => x.model === m.replace(/^~/, "") && x.games > 0);
   useEffect(() => {
     const k = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     addEventListener("keydown", k); first.current?.focus();
@@ -115,6 +118,7 @@ function ModelSheet({ id, value, onPick, onClose }: { id: string; value?: string
             <button key={o.model} ref={o.model === cur ? first : undefined} type="button" role="radio" aria-checked={o.model === cur} data-model={o.model} className={o.model === cur ? "msh-o on" : "msh-o"} onClick={() => onPick(o.model)}>
               <span className="msh-n">{o.label}{i === 0 && <em>Default</em>}</span>
               <small>{o.speed}{o.note ? ` · ${o.note}` : ""} · {o.model.replace(/^~/, "")}</small>
+              {(() => { const st = statOf(o.model); return st ? <small className="msh-stat" data-stat><span><I n="trophy" size={12} /> {st.winPct}% wins</span><span><I n="clock" size={12} /> {secs(st.avgMs)}</span><span className="muted">{st.games} games</span></small> : null; })()}
               {o.model === cur && <I n="check" size={16} />}
             </button>
           ))}

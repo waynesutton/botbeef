@@ -20,6 +20,7 @@ import type * as learn from "../learn.js";
 import type * as lib from "../lib.js";
 import type * as migrate from "../migrate.js";
 import type * as mindmap from "../mindmap.js";
+import type * as models from "../models.js";
 import type * as modelsAdmin from "../modelsAdmin.js";
 import type * as moderation from "../moderation.js";
 import type * as pages from "../pages.js";
@@ -51,6 +52,7 @@ declare const fullApi: ApiFromModules<{
   lib: typeof lib;
   migrate: typeof migrate;
   mindmap: typeof mindmap;
+  models: typeof models;
   modelsAdmin: typeof modelsAdmin;
   moderation: typeof moderation;
   pages: typeof pages;

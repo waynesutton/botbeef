@@ -24,6 +24,20 @@ export const ALERT_USD = 2_000;
 export const JEV_MODEL = "typesafe/jev-1.13";
 export const VERDICT_MODEL = "openai/gpt-5.4-nano";
 export const WEIGHTS = { fit: 0.5, creativity: 0.3, clarity: 0.2, judgeBait: 0.8 } as const;
+/** Pele mode: share of the score that comes from the mindmap structure (the rest is the WEIGHTS score). */
+export const PELE_WEIGHT = 0.15;
+/** Jev's 4-step scale per criterion (lowest to highest), sent as the score criteria. */
+export const JEV_LEVELS = {
+  fit: ["off-topic", "partly on-topic", "on target", "nails the challenge"],
+  creativity: ["generic", "some flair", "clever", "delightful"],
+  clarity: ["confusing", "okay", "clear", "crisp"],
+  structure: ["one blob or empty", "a couple of ideas", "clear distinct branches", "a tidy, rich map"],
+};
+/** Unsafe probability above which an answer scores 0; head-to-head pick confidence needed to break a tied score. */
+export const UNSAFE_CUTOFF = 0.7;
+export const TIE_BREAK_P = 0.55;
+/** Share of auto question picks that ignore the learned stats entirely (pure exploration). */
+export const EXPLORE = 0.2;
 
 export type Mode = "solo" | "hva" | "duel" | "exhibition";
 export const MODES: { id: Mode; name: string; blurb: string }[] = [

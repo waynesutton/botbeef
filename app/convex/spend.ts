@@ -7,10 +7,17 @@ import { dayKey, monthKey } from "./lib";
 
 // Write-conflict rule: the per-AI-call write is a blind insert (no reads), so concurrent AI calls never retry.
 // A single-writer cron folds settled rows into the monthly total, the game's cost and the host's day spend.
+export const callV = v.object({
+  model: v.string(), purpose: v.string(), bot: v.optional(v.string()), ms: v.number(), ttft: v.optional(v.number()),
+  tin: v.optional(v.number()), tout: v.optional(v.number()), ok: v.boolean(), err: v.optional(v.string()),
+});
 export const record = internalMutation({
-  args: { gameId: v.optional(v.id("games")), usd: v.number() },
+  args: { gameId: v.optional(v.id("games")), usd: v.number(), call: v.optional(callV) },
   handler: async (ctx, a) => {
-    await ctx.db.insert("spendLog", { t: Date.now(), usd: a.usd, ...(a.gameId ? { gameId: a.gameId } : {}) });
+    const t = Date.now();
+    await ctx.db.insert("spendLog", { t, usd: a.usd, ...(a.gameId ? { gameId: a.gameId } : {}) });
+    // Model scoreboard: also a blind insert (no reads), rolled up by models.rollup.
+    if (a.call) await ctx.db.insert("aiCalls", { t, ...a.call, usd: a.usd, rolled: false, ...(a.gameId ? { gameId: a.gameId } : {}) });
   },
 });
 

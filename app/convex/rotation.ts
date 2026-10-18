@@ -49,7 +49,7 @@ export function verdictOf(ans: Record<string, Answer> | undefined): Verdict {
 /** Jev with retries (ask-jev-ai judge.ts: 3 attempts with backoff). */
 export async function jevCheck(ctx: Parameters<typeof decide>[0], gameId: Id<"games"> | undefined, text: string): Promise<Verdict> {
   for (let i = 0; i < 3; i++) {
-    try { return verdictOf(await decide(ctx, gameId, JEV_MODEL, jevState(text), QUESTION_CHECKS)); }
+    try { return verdictOf(await decide(ctx, gameId, JEV_MODEL, jevState(text), QUESTION_CHECKS, { purpose: "moderation" })); }
     catch (e) { console.warn("question check attempt failed", i + 1, String(e)); if (i < 2) await new Promise((r) => setTimeout(r, 300 * 2 ** i)); }
   }
   return { state: "error", category: "unavailable" };
