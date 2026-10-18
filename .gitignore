@@ -32,3 +32,5 @@ art/ref/
 art/brands/
 # --- Notion export drafts (kept local) ---
 notion-content*.md
+# --- PRDs, setup logs and audits (kept local) ---
+prds/

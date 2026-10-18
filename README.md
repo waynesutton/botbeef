@@ -6,8 +6,6 @@ Convex only: database, realtime, scheduling, workpools, presence, rate limits, t
 
 - `app/`: the app. `app/convex` is the backend, `app/src` the SPA, `app/e2e` the Playwright/HTTP suites, `app/scripts/deploy.mjs` the deploy script.
 - `art/`: source art and the puppet rig scripts that generate `app/public/c/*`.
-- `PRD*.md`, `SETUP_LOG.md`: product and setup notes. `WRITE_CONFLICTS_REPORT.md` and `SECURITY_CHECK.md` are the latest audits.
-
 ## Run
 
 ```bash
