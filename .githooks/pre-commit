@@ -1,0 +1,8 @@
+#!/bin/sh
+# Blocks commits that stage secrets (sec-check #9). Enable once per clone: git config core.hooksPath .githooks
+# Needs gitleaks on PATH: https://github.com/gitleaks/gitleaks (brew install gitleaks)
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not installed; install it to scan staged files for secrets." >&2
+  exit 1
+fi
+exec gitleaks git --staged --redact --no-banner

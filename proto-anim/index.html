@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot Beef · plush puppet prototype (Grokbot)</title>
+<link rel="stylesheet" href="rig.css"><link rel="stylesheet" href="page.css"></head>
+<body>
+<h1>Grokbot plush puppet <small>2D cutout rig · WAAPI · no WebGL</small></h1>
+<div class="row">
+  <div id="big" class="stage big" title="Tap to expand"></div>
+  <div class="ctl">
+    <p class="lbl">Base loop</p><div class="btns" id="bases"></div>
+    <p class="lbl">One-shot moves</p><div class="btns" id="moves"></div>
+    <p class="lbl">Game-size boxes (88px arena · 64px strip, mirrored rival)</p>
+    <div class="minis"><div id="m88" class="stage" style="width:88px"></div><div id="m64" class="stage" style="width:64px"></div><div id="m64r" class="stage" style="width:64px"></div></div>
+    <p class="lbl">Simulated round: typing → nod, keyword → jump, every 4th word → dance step, big score jump → kick, lead → cheer, end → lose</p>
+    <div class="btns"><button id="sim">▶ simulate a round</button></div>
+    <p id="now" class="now">move: idle</p>
+  </div>
+</div>
+<div id="expand" class="expand" hidden><div id="xs" class="stage"></div><p class="xh">Tap for moves</p><button id="close" aria-label="Close">✕</button></div>
+<script type="module" src="page.js"></script>
+</body></html>

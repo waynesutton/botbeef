@@ -1,0 +1,131 @@
+{
+ "src": "/workspace/agent-battle/art/fullbody/grokbot.src.jpg",
+ "bg_thr": 70,
+ "note": "coords in source px (832x1248). box/ellipse = own pixels; ext = extra source pixels kept under neighbours (round 'ball joints') so joints never open a gap.",
+ "parts": {
+  "legL": {
+   "box": [
+    0,
+    858,
+    414,
+    1248
+   ],
+   "ext": [
+    [
+     "ellipse",
+     330,
+     858,
+     80,
+     60
+    ]
+   ],
+   "pivot": [
+    330,
+    858
+   ]
+  },
+  "legR": {
+   "box": [
+    414,
+    858,
+    832,
+    1248
+   ],
+   "ext": [
+    [
+     "ellipse",
+     500,
+     858,
+     80,
+     60
+    ]
+   ],
+   "pivot": [
+    500,
+    858
+   ]
+  },
+  "armL": {
+   "box": [
+    "rellipse",
+    222,
+    722,
+    70,
+    150,
+    22
+   ],
+   "ext": [
+    [
+     "ellipse",
+     290,
+     640,
+     52,
+     70
+    ]
+   ],
+   "pivot": [
+    282,
+    628
+   ]
+  },
+  "armR": {
+   "box": [
+    "rellipse",
+    610,
+    722,
+    70,
+    150,
+    -22
+   ],
+   "ext": [
+    [
+     "ellipse",
+     540,
+     640,
+     52,
+     70
+    ]
+   ],
+   "pivot": [
+    548,
+    628
+   ]
+  },
+  "torso": {
+   "box": [
+    278,
+    585,
+    551,
+    858
+   ],
+   "ext": [
+    [
+     "ellipse",
+     414,
+     730,
+     150,
+     175
+    ]
+   ],
+   "pivot": [
+    414,
+    858
+   ]
+  },
+  "head": {
+   "box": [
+    "ellipse",
+    412,
+    362,
+    262,
+    250
+   ],
+   "ext": [],
+   "pivot": [
+    414,
+    575
+   ]
+  }
+ },
+ "bg_free_below": 820
+}

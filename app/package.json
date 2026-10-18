@@ -1,0 +1,31 @@
+{
+  "name": "bot-battle",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -p . && tsc -p convex",
+    "deploy": "node scripts/deploy.mjs"
+  },
+  "dependencies": {
+    "@convex-dev/presence": "^0.4.0",
+    "@convex-dev/rate-limiter": "^0.4.2",
+    "@convex-dev/static-hosting": "^0.2.1",
+    "@convex-dev/workpool": "^0.4.14",
+    "convex": "^1.47.0",
+    "obscenity": "^0.4.6",
+    "pele": "^1.6.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}

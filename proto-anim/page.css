@@ -1,0 +1,11 @@
+body { font: 15px/1.4 system-ui, sans-serif; margin: 0; padding: 18px; background: #fbf4ee; color: #1f1633; }
+h1 { font-size: 20px; margin: 0 0 14px; } h1 small { font-weight: 600; color: #7a6f86; font-size: 13px; }
+.row { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.big { width: min(360px, 90vw); cursor: zoom-in; } .ctl { flex: 1; min-width: 260px; }
+.lbl { margin: 10px 0 6px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #7a6f86; }
+.btns { display: flex; flex-wrap: wrap; gap: 6px; } button { font: inherit; font-weight: 800; border: 0; border-radius: 999px; padding: 7px 14px; background: #7c3aed; color: #fff; cursor: pointer; }
+button.on { background: #1f1633; } .minis { display: flex; gap: 12px; align-items: end; } .now { font-weight: 800; }
+.expand { position: fixed; inset: 0; z-index: 9; display: grid; place-items: center; background: rgba(20, 10, 35, .82); }
+.expand[hidden] { display: none; } #xs { width: min(92vw, 78vh); box-shadow: 0 0 0 4px #fff, 0 20px 60px rgba(0,0,0,.5); animation: zin .35s cubic-bezier(.3,1.4,.5,1); }
+.xh { position: absolute; bottom: 18px; color: #fff; font-weight: 800; margin: 0; } #close { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; padding: 0; background: #fff; color: #1f1633; font-size: 18px; }
+@keyframes zin { from { transform: scale(.6); opacity: 0; } }
