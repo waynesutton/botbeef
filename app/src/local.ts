@@ -13,9 +13,18 @@ export function secret() {
   return s;
 }
 const memSeats = new Map<string, string>();
+let memDefault: string | null = null;
 export const store = {
   name: () => get("bb.name") ?? "",
   setName: (v: string) => set("bb.name", v),
+  /** Default name for an empty name field: "Player 4821", random digits made here in the browser and kept in this
+   * browser. No server counter, so no shared doc to contend on; the server validates it like any typed name. */
+  defaultName: () => {
+    let n = get("bb.dname") ?? memDefault;
+    if (!n || !/^Player \d{4}$/.test(n)) { n = `Player ${1000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 9000)}`; set("bb.dname", n); }
+    memDefault = n;
+    return n;
+  },
   char: () => get("bb.char") ?? "grokbot",
   setChar: (v: string) => set("bb.char", v),
   mode: () => get("bb.mode") ?? "solo",

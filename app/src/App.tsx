@@ -153,6 +153,9 @@ function LaunchCard() {
 
 function Home() {
   const [name, setName] = useState(store.name());
+  const dname = useMemo(() => store.defaultName(), []);
+  const playName = name.trim() || dname; // empty field = this browser's default name; typing overrides it
+  const nameOk = name.trim().length === 0 || name.trim().length >= 3;
   const [mode, setMode] = useState<Mode>(store.mode() as Mode);
   const [char, setChar] = useState(store.char());
   const [len, setLen] = useState<number>(() => (isDuration(store.len()) ? store.len() : DEFAULT_MS));
@@ -177,8 +180,8 @@ function Home() {
     try {
       store.setName(name); store.setMode(mode); store.setChar(char); store.setLen(len); store.setPele(pele);
       const r = await start(mode === "exhibition"
-        ? { secret: secret(), name, mode, characterId: ex[0], opponentId: ex[1], roundMs: len, question: qClean || undefined, pele, model: mdl(ex[0]), opponentModel: mdl(ex[1]) }
-        : { secret: secret(), name, mode, characterId: mode === "hva" ? undefined : char, roundMs: len, question: qClean || undefined, pele, model: mode === "hva" ? undefined : mdl(char) });
+        ? { secret: secret(), name: playName, mode, characterId: ex[0], opponentId: ex[1], roundMs: len, question: qClean || undefined, pele, model: mdl(ex[0]), opponentModel: mdl(ex[1]) }
+        : { secret: secret(), name: playName, mode, characterId: mode === "hva" ? undefined : char, roundMs: len, question: qClean || undefined, pele, model: mode === "hva" ? undefined : mdl(char) });
       if ("rejected" in r || !r.slug || !r.seat) { setErr("rejected" in r ? `${r.rejected.note} Try another question.` : "Try a different question."); setBusy(false); return; }
       store.setSeat(r.slug, r.seat);
       if (r.invite) store.setInvite(r.slug, r.invite);
@@ -197,7 +200,7 @@ function Home() {
       </section>
       <section className="card form">
         <label className="lbl" htmlFor="nm">Your name</label>
-        <input id="nm" className="inp" value={name} maxLength={20} placeholder="3 to 20 characters" onChange={(e) => setName(e.target.value)} autoComplete="nickname" />
+        <input id="nm" className="inp" value={name} maxLength={20} placeholder={`${dname}, or type your name`} onChange={(e) => setName(e.target.value)} autoComplete="nickname" />
         <div className="lbl">Mode</div>
         <div className="modes" role="radiogroup" aria-label="Mode">
           {MODES.map((x) => (
@@ -229,7 +232,7 @@ function Home() {
         </>}
         <QuestionField value={question} onChange={setQuestion} note={qMod.ok ? null : qMod.note} />
         {err && <p className="err" role="alert">{err}</p>}
-        <button className="btn big" disabled={busy || name.trim().length < 3 || qBad} onClick={go1}>{busy ? "Starting…" : `Start ${len / 1000}s battle`}</button>
+        <button className="btn big" disabled={busy || !nameOk || qBad} onClick={go1}>{busy ? "Starting…" : `Start ${len / 1000}s battle`}</button>
         <div className="seg" role="radiogroup" aria-label="Game length">
           {DURATIONS.map((d) => <button key={d} role="radio" aria-checked={len === d} className={len === d ? "on" : ""} onClick={() => setLen(d)}>{d / 1000}s</button>)}
         </div>
@@ -298,6 +301,9 @@ function Invite({ token }: { token: string }) {
   const peek = useQuery(api.games.peekInvite, { token });
   const claim = useMutation(api.games.claimInvite);
   const [name, setName] = useState(store.name());
+  const dname = useMemo(() => store.defaultName(), []);
+  const playName = name.trim() || dname; // empty field = this browser's default name; typing overrides it
+  const nameOk = name.trim().length === 0 || name.trim().length >= 3;
   const [char, setChar] = useState(store.char());
   const [len, setLen] = useState<number>(() => (isDuration(store.len()) ? store.len() : DEFAULT_MS));
   // Exhibition: host fills both corners. "random" is allowed in either slot.
@@ -322,15 +328,15 @@ function Invite({ token }: { token: string }) {
       <p className="sub center">Their {charById(peek.hostCharacter ?? undefined)?.name ?? "bot"} vs your bot. You coach yours with a prompt for {peek.roundMs / 1000} seconds. You only see your own prompt until the reveal.{peek.pele && " Pele mode is on: every word grows your bot's mindmap."}</p>
       {peek.question && <p className="inv-q"><span>Their question</span>{peek.question}</p>}
       <label className="lbl" htmlFor="nm2">Your name</label>
-      <input id="nm2" className="inp" value={name} maxLength={20} onChange={(e) => setName(e.target.value)} />
+      <input id="nm2" className="inp" value={name} maxLength={20} placeholder={`${dname}, or type your name`} onChange={(e) => setName(e.target.value)} autoComplete="nickname" />
       <div className="lbl">Your character</div>
       <CharPicker value={pick} onChange={setChar} taken={peek.hostCharacter ? { id: peek.hostCharacter, tag: "P1", who: peek.hostName ?? "Host", color: P1, locked: true } : null} models={models} onModel={(id, m) => setModels((x) => ({ ...x, [id]: m }))} />
       {err && <p className="err" role="alert">{err}</p>}
-      <button className="btn big" disabled={name.trim().length < 3} onClick={async () => {
+      <button className="btn big" disabled={!nameOk} onClick={async () => {
         try {
           store.setName(name); store.setChar(pick); buzz("start");
           const m = models[pick] && models[pick] !== modelOptions(pick)[0]?.model ? models[pick] : undefined;
-          const r = await claim({ token, secret: secret(), name, characterId: pick, model: m });
+          const r = await claim({ token, secret: secret(), name: playName, characterId: pick, model: m });
           store.setSeat(r.slug, r.seat);
           go(`/play/${r.slug}`);
         } catch (e) { setErr(errMsg(e)); }
