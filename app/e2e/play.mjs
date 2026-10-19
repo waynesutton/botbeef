@@ -129,7 +129,7 @@ const emb = await mk({ viewport: { width: 640, height: 480 } });
 await emb.p.goto(`${S}/g/${slug}?embed=1`); await emb.p.waitForSelector(".reveal");
 await imgs(emb.p); await emb.p.screenshot({ path: `${OUT}/07-in-tweet-embed-640x480.png` });
 ok("embed has no nav", (await emb.p.locator("nav.nav").count()) === 0);
-await emb.p.goto(`${S}/in-tweet`); await emb.p.waitForSelector("text=Who's got bars?");
+await emb.p.goto(`${S}/in-tweet`); await emb.p.waitForSelector(".it-game, .it-empty"); // the card now plays a battle (e2e/in-tweet.mjs covers it)
 await imgs(emb.p); await emb.p.screenshot({ path: `${OUT}/08-in-tweet-home-640x480.png` });
 
 // Human vs Agent with early lock-in (desktop, dark)
@@ -170,7 +170,7 @@ await spec.p.waitForSelector(".lb-row.agent");
 const g = await spec.p.locator(".lb-row.agent .rec").allTextContents();
 ok("agent stats updated", g.some((t) => /^[1-9]|-[1-9]|-\d+-[1-9]/.test(t) && !t.startsWith("0-0-0")), g.slice(0, 2).join(" | "));
 await imgs(spec.p); await spec.p.screenshot({ path: `${OUT}/12-leaderboard-agents.png`, fullPage: true });
-await P.goto(`${S}/leaderboard`); await P.waitForSelector(".mystats");
+await P.goto(`${S}/leaderboard?tab=players`); await P.waitForSelector(".mystats");
 ok("player stats show on leaderboard", /E2E Wayne#/.test(await P.locator(".mystats").textContent()));
 await imgs(P); await P.screenshot({ path: `${OUT}/13-leaderboard-players-mobile.png`, fullPage: true });
 

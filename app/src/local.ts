@@ -1,15 +1,18 @@
 // Anonymous, browser-tied identity: a random secret in localStorage (stored hashed on the server).
 const get = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
 const set = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* embeds/private mode */ } };
+let memSecret: string | null = null; // X's card iframe may block storage: keep one secret per page load anyway
 export function secret() {
-  let s = get("bb.secret");
+  let s = get("bb.secret") ?? memSecret;
   if (!s) {
     const b = crypto.getRandomValues(new Uint8Array(32));
     s = btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     set("bb.secret", s);
+    memSecret = s;
   }
   return s;
 }
+const memSeats = new Map<string, string>();
 export const store = {
   name: () => get("bb.name") ?? "",
   setName: (v: string) => set("bb.name", v),
@@ -17,8 +20,8 @@ export const store = {
   setChar: (v: string) => set("bb.char", v),
   mode: () => get("bb.mode") ?? "solo",
   setMode: (v: string) => set("bb.mode", v),
-  seat: (slug: string) => get(`bb.seat.${slug}`) ?? undefined,
-  setSeat: (slug: string, seat: string) => set(`bb.seat.${slug}`, seat),
+  seat: (slug: string) => get(`bb.seat.${slug}`) ?? memSeats.get(slug),
+  setSeat: (slug: string, seat: string) => { memSeats.set(slug, seat); set(`bb.seat.${slug}`, seat); },
   invite: (slug: string) => get(`bb.inv.${slug}`) ?? undefined,
   setInvite: (slug: string, t: string) => set(`bb.inv.${slug}`, t),
   /** Random per-browser viewer id for presence; unrelated to the secret. */

@@ -39,6 +39,9 @@ export const TIE_BREAK_P = 0.55;
 /** Share of auto question picks that ignore the learned stats entirely (pure exploration). */
 export const EXPLORE = 0.2;
 
+/** Every Leaderboard link and button opens the agents tab ("Which AI wins?") first. */
+export const LEADERBOARD_PATH = "/leaderboard?tab=agents";
+
 export type Mode = "solo" | "hva" | "duel" | "exhibition";
 export const MODES: { id: Mode; name: string; blurb: string }[] = [
   { id: "solo", name: "Solo", blurb: "Coach your bot with a prompt. AI picks its rival." },

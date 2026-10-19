@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import usePresence from "@convex-dev/presence/react";
 import type { FunctionReturnType } from "convex/server";
 import { api } from "../convex/_generated/api";
-import { charById, MAX_CHARS, secsLabel, words } from "../convex/config";
+import { charById, LEADERBOARD_PATH, MAX_CHARS, secsLabel, words } from "../convex/config";
 import { Avatar, Link, Meter, Sparkline, copy, nameFor, colorFor, useNow, useSpring, xIntent, type Mood } from "./ui";
 import { go, isEmbed } from "./nav";
 import { errMsg, secret, store } from "./local";
@@ -294,7 +294,7 @@ function PlayOnX({ v, slug, sm }: { v: View; slug: string; sm?: boolean }) {
 function ShareBar({ v, slug }: { v: View; slug: string }) {
   const [ok, setOk] = useState(false);
   const url = `${location.origin}/g/${slug}`;
-  if (isEmbed()) return <div className="row center"><a className="btn" href="/" target="_blank" rel="noopener">Start your own <I n="out" /></a><a className="btn ghost" href="/leaderboard" target="_blank" rel="noopener">Leaderboard <I n="out" /></a><PlayOnX v={v} slug={slug} /></div>;
+  if (isEmbed()) return <div className="row center"><a className="btn" href="/" target="_blank" rel="noopener">Start your own <I n="out" /></a><a className="btn ghost" href={LEADERBOARD_PATH} target="_blank" rel="noopener">Leaderboard <I n="out" /></a><PlayOnX v={v} slug={slug} /></div>;
   return <div className="sharebar"><button className="btn ghost sm" onClick={async () => setOk(await copy(url))}>{ok ? <><I n="check" /> Watch link copied</> : "Copy watch link"}</button><Watching slug={slug} /><PlayOnX v={v} slug={slug} sm /></div>;
 }
 
@@ -326,7 +326,7 @@ function Reveal({ v, slug, seat, onReplay, replaying }: { v: View; slug: string;
         <PlayOnX v={v} slug={slug} />
         {!embed && <button className="btn ghost" onClick={async () => setOk(await copy(url))}>{ok ? <><I n="check" /> Copied</> : "Copy link"}</button>}
         {embed ? <a className="btn ghost" href="/" target="_blank" rel="noopener">Start your own <I n="out" /></a> : <Link to="/" className="btn ghost">Start your own</Link>}
-        {embed ? <a className="btn ghost" href="/leaderboard" target="_blank" rel="noopener">Leaderboard <I n="out" /></a> : <Link to="/leaderboard" className="btn ghost">Leaderboard</Link>}
+        {embed ? <a className="btn ghost" href={LEADERBOARD_PATH} target="_blank" rel="noopener">Leaderboard <I n="out" /></a> : <Link to={LEADERBOARD_PATH} className="btn ghost">Leaderboard</Link>}
       </div>
       {err && <p className="err" role="alert">{err}</p>}
     </div>

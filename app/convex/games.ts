@@ -12,7 +12,7 @@ import {
 import { localCheck, type ModCategory } from "./moderation";
 import { bump, addApproved, pickRotation } from "./rotation";
 import { onAbandoned, onRematch, pickChallengeId } from "./learn";
-import { livePool, finalPool, rateLimiter, slug as mkSlug, token as mkToken, sha256, cleanName, seatCorner, gameBySlug, dayKey, limitByIp, isPublicGame } from "./lib";
+import { livePool, finalPool, rateLimiter, slug as mkSlug, token as mkToken, sha256, cleanName, seatCorner, gameBySlug, dayKey, limitByIp, isPublicGame, isPublicResult } from "./lib";
 import * as R from "./returns";
 
 type Corner = Doc<"games">["corners"][number];
@@ -406,5 +406,23 @@ export const setQuestionState = internalMutation({
   handler: async (ctx, a) => {
     const g = await ctx.db.get(a.gameId);
     if (g?.questionState === "pending") await settleQuestion(ctx, g, a.verdict);
+  },
+});
+
+/** /in-tweet (the X player card): a live public game to watch right inside the post, else the latest public replay.
+ * Returns a slug only; the card then renders the normal public watch view (games.view) for it. */
+export const featured = query({
+  args: {},
+  returns: R.featuredResult,
+  handler: async (ctx) => {
+    const fresh = Date.now() - 10 * 60_000;
+    for (const status of ["live", "countdown"] as const) {
+      const gs = await ctx.db.query("games").withIndex("by_status", (q) => q.eq("status", status).gt("createdAt", fresh)).order("desc").take(10);
+      const pick = gs.find((g) => g.mode === "exhibition") ?? gs.find((g) => g.mode !== "duel");
+      if (pick && (await isPublicGame(ctx, pick))) return { slug: pick.slug, live: true };
+    }
+    const rs = await ctx.db.query("results").withIndex("by_finished").order("desc").take(20);
+    const r = rs.find((x) => isPublicResult(x) && x.scores.some((n) => n > 0));
+    return r ? { slug: r.slug, live: false } : null;
   },
 });

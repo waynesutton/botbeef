@@ -172,7 +172,11 @@ main { min-height: 70vh; }
 .embedded .bubble { min-height: 56px; max-height: 110px; overflow: hidden; font-size: 13px; }
 .embedded .f-head .av { width: 56px !important; height: 56px !important; } .embedded .meter-num { font-size: 24px; }
 .embedded .reveal { padding: 10px; gap: 6px; } .embedded .final-s b { font-size: 32px; } .embedded .spark { height: 50px; }
-.it { text-align: center; display: grid; gap: 8px; padding-top: 8px; } .it h1 { margin: 0; font-size: 40px; font-weight: 900; letter-spacing: -.03em; }
+.it { display: grid; gap: 6px; padding-top: 4px; } .it h1 { margin: 0; font-size: 40px; font-weight: 900; letter-spacing: -.03em; }
+.it-bar { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.it-acts { display: flex; gap: 6px; flex-wrap: wrap; } .it-acts .btn { padding: 6px 10px; font-size: 13px; }
+.it-k { margin: 0; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; font-size: 11px; }
+.it-empty { text-align: center; display: grid; gap: 8px; justify-items: center; }
 .it-top { display: flex; gap: 6px; align-items: center; justify-content: center; } .it-top img { border-radius: 8px; }
 .it-recent { list-style: none; padding: 0; margin: 0; font-size: 13px; display: grid; gap: 2px; }
 

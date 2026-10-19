@@ -6,13 +6,13 @@ import { MIN_AGENT_GAMES_TO_RANK, MIN_GAMES_TO_RANK } from "../convex/config";
 import { Avatar, Link } from "./ui";
 import { secret } from "./local";
 
-type Tab = "players" | "agents" | "models" | "recent";
-const TABS: Tab[] = ["players", "agents", "models", "recent"];
+type Tab = "agents" | "models" | "recent" | "players";
+const TABS: Tab[] = ["agents", "models", "recent", "players"]; // Agents first (the default), Players last
 const LABEL: Record<Tab, string> = { players: "Players", agents: "Which AI wins?", models: "Models", recent: "Recent battles" };
-const initialTab = (): Tab => { const t = new URLSearchParams(location.search).get("tab") as Tab; return TABS.includes(t) ? t : "players"; };
+const initialTab = (): Tab => { const t = new URLSearchParams(location.search).get("tab") as Tab; return TABS.includes(t) ? t : "agents"; };
 export function Leaderboard() {
   const [tab, setTabState] = useState<Tab>(initialTab);
-  const setTab = (t: Tab) => { setTabState(t); const u = new URL(location.href); if (t === "players") u.searchParams.delete("tab"); else u.searchParams.set("tab", t); history.replaceState(history.state, "", u); };
+  const setTab = (t: Tab) => { setTabState(t); const u = new URL(location.href); u.searchParams.set("tab", t); history.replaceState(history.state, "", u); };
   const [period, setPeriod] = useState<"week" | "all">("week");
   return (
     <div className="lb">

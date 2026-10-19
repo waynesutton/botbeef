@@ -19,7 +19,7 @@ for (const w of [390, 1280]) {
   await P.goto(S + "/");
   const nav = await P.locator(".nav-r > *").evaluateAll((els) => els.filter((e) => getComputedStyle(e).display !== "none").map((e) => e.textContent.trim() || e.getAttribute("aria-label")));
   ok(`${w}: header has Bots right next to Leaderboard`, nav.indexOf("Bots") >= 0 && nav.indexOf("Leaderboard") === nav.indexOf("Bots") + 1, JSON.stringify(nav));
-  const st = await P.locator(".nav-r a[href='/bots']").evaluate((e) => { const c = getComputedStyle(e), l = getComputedStyle(document.querySelector(".nav-r a[href='/leaderboard']")); return { same: e.className === "nav-a" && c.font === l.font && c.color === l.color, flat: c.backgroundColor === "rgba(0, 0, 0, 0)" && c.boxShadow === "none" && c.borderTopWidth === "0px" }; });
+  const st = await P.locator(".nav-r a[href='/bots']").evaluate((e) => { const c = getComputedStyle(e), l = getComputedStyle(document.querySelector(".nav-r a[href='/leaderboard?tab=agents']")); return { same: e.className === "nav-a" && c.font === l.font && c.color === l.color, flat: c.backgroundColor === "rgba(0, 0, 0, 0)" && c.boxShadow === "none" && c.borderTopWidth === "0px" }; });
   ok(`${w}: Bots link is a flat text link, same style as Leaderboard`, st.same && st.flat, JSON.stringify(st));
   ok(`${w}: header fits on one line`, await P.locator(".nav").evaluate((e) => e.getBoundingClientRect().height < 70 && e.scrollWidth <= e.clientWidth + 1));
   await P.click(".nav-r a[href='/bots']"); await P.waitForURL(/\/bots$/);

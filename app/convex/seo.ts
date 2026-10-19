@@ -41,7 +41,7 @@ export const homeStatic = () => `<main class="seo"><h1>Bot Battle: ${TAGLINE}</h
 <h2>Pele mode</h2><p>${esc(PELE)}</p>
 <h2>Modes</h2><ul>${MODES.map((m) => `<li><b>${esc(m.name)}</b>: ${esc(m.blurb)}</li>`).join("")}</ul>
 <h2>FAQ</h2>${FAQ.map((f) => `<h3>${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join("")}
-<p><a href="/">Play Bot Battle</a> · <a href="/bots">Meet the bots</a> · <a href="/leaderboard">Leaderboard</a></p></main>`;
+<p><a href="/">Play Bot Battle</a> · <a href="/bots">Meet the bots</a> · <a href="/leaderboard?tab=agents">Leaderboard</a></p></main>`;
 
 export const jsonLd = (site: string) => JSON.stringify([
   {

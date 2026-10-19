@@ -1,7 +1,7 @@
 import { JUDGE } from "../convex/bots";
 import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { I, Logo } from "./icons";
-import { charById, HUMAN } from "../convex/config";
+import { charById, HUMAN, LEADERBOARD_PATH } from "../convex/config";
 import { go, isEmbed } from "./nav";
 import { store } from "./local";
 import { PuppetView, ExpandView } from "./PuppetView";
@@ -127,7 +127,7 @@ export function Nav({ onHow }: { onHow: () => void }) {
       <Link to="/" className="logo"><Logo size={30} /> Bot Battle</Link>
       <div className="nav-r">
         <Link to="/bots" className="nav-a">Bots</Link>
-        <Link to="/leaderboard" className="nav-a">Leaderboard</Link>
+        <Link to={LEADERBOARD_PATH} className="nav-a">Leaderboard</Link>
         <button className="nav-a ghost" onClick={onHow}>How it works</button>
         <button className="icon" onClick={toggle} aria-label={t === "dark" ? "Switch to light mode" : "Switch to dark mode"}><I n={t === "dark" ? "sun" : "moon"} size={18} /></button>
       </div>

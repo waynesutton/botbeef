@@ -53,7 +53,9 @@ for (const [tag, vp] of [["mobile", { width: 390, height: 844 }], ["desktop", { 
   const nav = await P.locator(".nav-r > *").evaluateAll((els) => els.filter((e) => getComputedStyle(e).display !== "none").map((e) => e.textContent.trim() || e.getAttribute("aria-label")));
   ok(`${tag}: header unchanged and flat (no Models item)`, !nav.includes("Models") && nav.includes("Leaderboard") && await P.locator(".nav").evaluate((e) => e.getBoundingClientRect().height < 70), JSON.stringify(nav));
   const tabs = await P.locator(".lb .tab").allInnerTexts();
-  ok(`${tag}: Models tab sits next to the other leaderboard tabs`, tabs.join("|") === "Players|Which AI wins?|Models|Recent battles", tabs.join("|"));
+  ok(`${tag}: tab order is Agents, Models, Recent, Players`, tabs.join("|") === "Which AI wins?|Models|Recent battles|Players", tabs.join("|"));
+  ok(`${tag}: /leaderboard opens on the agents tab`, (await P.locator(".lb .tab.on").innerText()) === "Which AI wins?" && (await P.locator(".lb-row.agent").first().waitFor({ timeout: 15000 }).then(() => true, () => false)));
+  ok(`${tag}: header Leaderboard link goes to ?tab=agents`, (await P.locator(".nav-r a.nav-a:has-text('Leaderboard')").getAttribute("href")) === "/leaderboard?tab=agents");
   await P.click(".lb .tab[data-tab=models]");
   ok(`${tag}: tab updates the URL to ?tab=models`, /\?tab=models$/.test(P.url()));
   await P.waitForSelector(".mcard", { timeout: 20000 });

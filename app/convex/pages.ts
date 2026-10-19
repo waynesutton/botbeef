@@ -35,7 +35,7 @@ export const page = httpAction(async (ctx, req) => {
     title = "Meet the bots · Bot Battle";
     desc = BOTS_DESC;
     image = `${site}/og/bots.v1.jpg`;
-    body = `<main class="seo"><h1>Meet the bots</h1><p>${esc(desc)}</p><h2>Jev, ${JUDGE_CARD.title.toLowerCase()}</h2><p>${esc(JUDGE_CARD.tagline)} ${esc(JUDGE_CARD.how)} ${esc(JUDGE_CARD.credit)}.</p><ul>${botsList().map((b) => `<li><b>${esc(b.name)}</b> (${esc(b.vibe)}): ${esc(b.card.tagline)} Default model ${esc(b.def.model.replace(/^~/, ""))}, ${b.alts} swap-in models.</li>`).join("")}</ul><p>Models come from the <a href="${GATEWAY_URL}">Convex AI Gateway</a>.</p><p><a href="/">Play Bot Battle</a> · <a href="/leaderboard">Leaderboard</a></p></main>`;
+    body = `<main class="seo"><h1>Meet the bots</h1><p>${esc(desc)}</p><h2>Jev, ${JUDGE_CARD.title.toLowerCase()}</h2><p>${esc(JUDGE_CARD.tagline)} ${esc(JUDGE_CARD.how)} ${esc(JUDGE_CARD.credit)}.</p><ul>${botsList().map((b) => `<li><b>${esc(b.name)}</b> (${esc(b.vibe)}): ${esc(b.card.tagline)} Default model ${esc(b.def.model.replace(/^~/, ""))}, ${b.alts} swap-in models.</li>`).join("")}</ul><p>Models come from the <a href="${GATEWAY_URL}">Convex AI Gateway</a>.</p><p><a href="/">Play Bot Battle</a> · <a href="/leaderboard?tab=agents">Leaderboard</a></p></main>`;
   }
   if (path === "/in-tweet") card = "player";
   const m = path.match(/^\/g\/([0-9A-Za-z]{10})\/?$/);
