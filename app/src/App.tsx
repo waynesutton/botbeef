@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { buzz } from "./haptics";
-import { I } from "./icons";
+import { I, Logo } from "./icons";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { ROSTER, MODES, RANDOM, ALLOW_MIRROR, DURATIONS, DEFAULT_MS, isDuration, type Mode, charById, isActive, QUESTION_SUGGESTIONS, QUESTION_MAX, QUESTION_MIN, cleanQuestion, modelOptions, modelFor } from "../convex/config";
+import { ROSTER, MODES, RANDOM, ALLOW_MIRROR, DURATIONS, DEFAULT_MS, isDuration, type Mode, charById, isActive, QUESTION_SUGGESTIONS, QUESTION_MAX, QUESTION_MIN, cleanQuestion, modelOptions, modelFor, LEADERBOARD_PATH } from "../convex/config";
 import { localCheck } from "../convex/moderation";
 import { Avatar, Footer, Link, Nav } from "./ui";
 import { ABOUT, BENCH, FAQ, HOW } from "../convex/seo";
@@ -16,6 +16,7 @@ import { useModelBoard, secs } from "./Models";
 import { Bots } from "./Bots";
 
 export function App() {
+  if (CARD) return <LaunchCard />;
   const { path } = useLocation();
   const [how, setHow] = useState(false);
   const embed = isEmbed();
@@ -124,6 +125,30 @@ function ModelSheet({ id, value, onPick, onClose }: { id: string; value?: string
         </div>
       </div>
     </div>, document.body);
+}
+
+/** /in-tweet inside X's card frame: a no-scroll launch card. Everything opens the full app in a new tab, since
+ * X's frame doesn't scroll and is too small to play in. Opened directly (not framed), /in-tweet is the regular home. */
+const inFrame = (() => { try { return window.self !== window.top; } catch { return true; } })();
+const CARD = location.pathname === "/in-tweet" && inFrame;
+if (location.pathname === "/in-tweet" && !inFrame) history.replaceState(history.state, "", "/" + location.hash);
+if (CARD) document.documentElement.classList.add("lcard-on");
+
+function LaunchCard() {
+  const open = (path: string) => window.open(path, "_blank", "noopener");
+  const av = Math.round(Math.max(40, Math.min(84, innerHeight * 0.17))); // avatars scale with the frame height
+  return (
+    <div className="lcard" role="link" tabIndex={0} aria-label="Open Bot Battle" onClick={() => open("/")} onKeyDown={(e) => { if (e.key === "Enter") open("/"); }}>
+      <div className="lc-top"><Logo size={24} /> <b>Bot Battle</b></div>
+      <div className="lc-row">{["grokbot", "musey", "dotty"].map((id, i) => <Avatar key={id} id={id} size={Math.round(av * (i === 1 ? 1.25 : 1))} mood={i === 1 ? "smug" : "idle"} />)}</div>
+      <h1>Who's got bars?</h1>
+      <p className="lc-sub">AI bots battle live. Jev scores every word.</p>
+      <div className="lc-btns">
+        <a className="btn" href="/" target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}><I n="play" /> Play</a>
+        <a className="btn ghost" href={LEADERBOARD_PATH} target="_blank" rel="noopener" onClick={(e) => e.stopPropagation()}>Leaderboard <I n="out" /></a>
+      </div>
+    </div>
+  );
 }
 
 function Home() {

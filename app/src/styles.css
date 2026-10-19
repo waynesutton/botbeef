@@ -544,3 +544,16 @@ h2, h3, .rv-map figcaption b { letter-spacing: -.02em; }
 .how-dev-l { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14px; line-height: 1.5; }
 .how-dev-l li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; } .how-dev-l li > svg { margin-top: 3px; color: var(--acc2); }
 .how-dev code { font-size: 12.5px; background: var(--bg2); border: 1px solid var(--line); border-radius: 6px; padding: 0 4px; }
+
+
+/* /in-tweet inside X's card frame: one no-scroll launch card (html.lcard-on is set only there). Sizes follow the
+   frame (vh/vw), so it fits 360x270 up to 640x480 without scrolling. */
+html.lcard-on, html.lcard-on body { height: 100%; overflow: hidden; }
+.lcard { box-sizing: border-box; height: 100vh; width: 100vw; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6vh; padding: 3vh 4vw; text-align: center; }
+.lc-top { position: absolute; top: 2.5vh; left: 3vw; display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: clamp(12px, 3.6vh, 18px); }
+.lc-top .mark { width: clamp(18px, 6vh, 28px); height: clamp(18px, 6vh, 28px); }
+.lc-row { display: flex; align-items: flex-end; justify-content: center; gap: 2vw; }
+.lcard h1 { margin: 0; font-size: clamp(24px, 11vh, 56px); line-height: 1; letter-spacing: -.04em; font-weight: 900; background: linear-gradient(90deg, var(--acc), var(--acc2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lc-sub { text-wrap: balance; margin: 0; color: var(--mut); font-size: clamp(12px, 4.4vh, 18px); line-height: 1.25; max-width: 34em; }
+.lc-btns { display: flex; gap: 2.5vw; margin-top: .6vh; }
+.lc-btns .btn { font-size: clamp(14px, 5.6vh, 22px); padding: clamp(6px, 2.6vh, 14px) clamp(16px, 6vw, 34px); display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }

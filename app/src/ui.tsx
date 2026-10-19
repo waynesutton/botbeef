@@ -124,7 +124,7 @@ export function Nav({ onHow }: { onHow: () => void }) {
   const [t, toggle] = useTheme();
   return (
     <nav className="nav">
-      <Link to="/" className="logo"><Logo size={30} /> Bot Battle</Link>
+      <Link to="/" className="logo"><Logo size={30} /> <span className="lt">Bot Battle</span></Link>
       <div className="nav-r">
         <Link to="/bots" className="nav-a">Bots</Link>
         <Link to={LEADERBOARD_PATH} className="nav-a">Leaderboard</Link>
