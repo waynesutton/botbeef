@@ -129,7 +129,7 @@ const emb = await mk({ viewport: { width: 640, height: 480 } });
 await emb.p.goto(`${S}/g/${slug}?embed=1`); await emb.p.waitForSelector(".reveal");
 await imgs(emb.p); await emb.p.screenshot({ path: `${OUT}/07-in-tweet-embed-640x480.png` });
 ok("embed has no nav", (await emb.p.locator("nav.nav").count()) === 0);
-await emb.p.goto(`${S}/in-tweet`); await emb.p.waitForSelector(".it-game, .it-empty"); // the card now plays a battle (e2e/in-tweet.mjs covers it)
+await emb.p.goto(`${S}/in-tweet`); await emb.p.waitForSelector("text=Who's got bars?"); // /in-tweet is the regular home (e2e/in-tweet.mjs covers framing)
 await imgs(emb.p); await emb.p.screenshot({ path: `${OUT}/08-in-tweet-home-640x480.png` });
 
 // Human vs Agent with early lock-in (desktop, dark)

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { buzz } from "./haptics";
-import { I, Logo } from "./icons";
+import { I } from "./icons";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { ROSTER, MODES, RANDOM, ALLOW_MIRROR, DURATIONS, DEFAULT_MS, isDuration, type Mode, charById, isActive, QUESTION_SUGGESTIONS, QUESTION_MAX, QUESTION_MIN, cleanQuestion, modelOptions, modelFor, LEADERBOARD_PATH } from "../convex/config";
+import { ROSTER, MODES, RANDOM, ALLOW_MIRROR, DURATIONS, DEFAULT_MS, isDuration, type Mode, charById, isActive, QUESTION_SUGGESTIONS, QUESTION_MAX, QUESTION_MIN, cleanQuestion, modelOptions, modelFor } from "../convex/config";
 import { localCheck } from "../convex/moderation";
 import { Avatar, Footer, Link, Nav } from "./ui";
 import { ABOUT, BENCH, FAQ, HOW } from "../convex/seo";
@@ -25,8 +25,7 @@ export function App() {
   else if ((m = path.match(/^\/j\/([A-Za-z0-9_-]+)\/?$/))) page = <Invite token={m[1]} />;
   else if (path.startsWith("/leaderboard")) page = <Leaderboard />;
   else if (path === "/bots" || path === "/bots/") page = <Bots />;
-  else if (path === "/in-tweet") page = <InTweet />;
-  else page = <Home />;
+  else page = <Home />; // includes /in-tweet: the X player card URL opens the regular home UI (framed in X or tapped through)
   if (embed) return <EmbedFit>{page}<Footer compact /></EmbedFit>;
   return (
     <>
@@ -324,50 +323,6 @@ function EmbedFit({ children }: { children: React.ReactNode }) {
     fit(); addEventListener("resize", fit); return () => removeEventListener("resize", fit);
   }, []);
   return <div className="embed">{children}</div>;
-}
-
-/** /in-tweet: the X player card. Plays inside the post: it shows a live battle (or the latest replay) with the normal
- * watch view, and "Start a bot battle" runs a fresh bot-vs-bot game right in the card. Typing games open the site. */
-function InTweet() {
-  const featured = useQuery(api.games.featured, {});
-  const start = useMutation(api.games.start);
-  const [mine, setMine] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
-  const slug = mine ?? featured?.slug ?? null;
-  const battle = async () => {
-    setBusy(true); setErr("");
-    try {
-      const ids = ROSTER.map((c) => c.id).sort(() => Math.random() - 0.5);
-      const r = await start({ secret: secret(), name: store.name() || "X viewer", mode: "exhibition", characterId: ids[0], opponentId: ids[1], roundMs: 30_000, pele: store.pele() });
-      if (r.slug) { if (r.seat) store.setSeat(r.slug, r.seat); setMine(r.slug); }
-    } catch (e) { setErr(errMsg(e)); } finally { setBusy(false); }
-  };
-  return (
-    <div className="it">
-      <div className="it-bar">
-        <span className="it-top"><Logo size={22} /> <b>Bot Battle</b></span>
-        <span className="it-acts">
-          <button className="btn sm" data-act="battle" onClick={battle} disabled={busy}><I n="play" /> {busy ? "Starting…" : mine ? "New bot battle" : "Start a bot battle"}</button>
-          <a className="btn ghost sm" href="/" target="_blank" rel="noopener">Play yourself <I n="out" /></a>
-          <a className="btn ghost sm" href={LEADERBOARD_PATH} target="_blank" rel="noopener">Leaderboard <I n="out" /></a>
-        </span>
-      </div>
-      {err && <p className="err small">{err}</p>}
-      {slug ? (
-        <div className="it-game" data-slug={slug} data-live={mine ? "mine" : featured?.live ? "live" : "replay"}>
-          {!mine && <p className="it-k muted small">{featured?.live ? "Live now" : "Latest battle, replay"}</p>}
-          <Game key={slug} slug={slug} asPlayer={false} />
-        </div>
-      ) : featured === undefined ? <p className="muted">Loading…</p> : (
-        <div className="it-empty">
-          <div className="hero-row">{["grokbot", "musey", "dotty", "sparkle"].map((id) => <Avatar key={id} id={id} size={64} />)}</div>
-          <h1>Who's got bars?</h1>
-          <p className="sub">15, 30 or 45-second AI battles, scored live by Jev. Tap Start a bot battle to watch one right here.</p>
-        </div>
-      )}
-    </div>
-  );
 }
 
 function HowItWorks({ onClose }: { onClose: () => void }) {

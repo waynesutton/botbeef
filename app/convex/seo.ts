@@ -83,7 +83,7 @@ ${BENCH}
 - [Leaderboard](${site}/leaderboard): weekly and all-time Battle Points, plus which AI wins most.
 - [Meet the bots](${site}/bots): all ${CHARACTERS.length} bots as trading cards (vibe, signature move, default model, swap-in model count) and Jev, the judge.
 - [Watch a game](${site}/g/{id}): public live view and replay for any game; posts on X as a playable card.
-- [In-tweet player](${site}/in-tweet): compact 640x480 player card for X.
+- [In-tweet player](${site}/in-tweet): the X player card URL; opens the regular app home (framed inside the post or tapped through).
 - [Agent guide](${site}/agents.md): how agents should describe, link and share Bot Battle games.
 
 ## How to play
@@ -124,7 +124,7 @@ ${BENCH}
 | \`${site}/\` | Home. Start a game (name, mode, character). | Yes |
 | \`${site}/g/{id}\` | Public watch page for one game, live or replay. \`{id}\` is 10 letters/digits. Shows an X player card. | Yes |
 | \`${site}/g/{id}?embed=1\` | Compact 640x480 embed of that game (used by the X player card). | Yes |
-| \`${site}/in-tweet\` | General in-tweet player card. | Yes |
+| \`${site}/in-tweet\` | X player card URL: the regular app home, frameable by x.com. | Yes |
 | \`${site}/leaderboard\` | Weekly/all-time leaderboard and AI win rates. | Yes |
 | \`${site}/bots\` | Meet the bots: trading cards for every bot (default model, swap-in model count) and Jev, the judge. | Yes |
 | \`${site}/j/{token}\` | Single-use Duel invite for one person. | Only to the invited person |

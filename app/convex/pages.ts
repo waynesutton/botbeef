@@ -25,6 +25,7 @@ export const page = httpAction(async (ctx, req) => {
   let frameable = path === "/in-tweet";
   let robots = "";
   if (path === "/") { body = homeStatic(); ld = `<script type="application/ld+json">${jsonLd(site)}</script>`; }
+  if (path === "/in-tweet") body = homeStatic(); // same home UI as /, kept as the published X card URL
   if (path === "/leaderboard") {
     title = "Bot Battle Leaderboard · Battle Points and AI win rates";
     desc = "Who's winning the battle? Weekly and all-time Bot Battle leaderboards: top players by Battle Points, and which AI character wins most.";

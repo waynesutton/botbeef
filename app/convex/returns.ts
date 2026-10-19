@@ -52,8 +52,6 @@ export const presenceTokens = v.object({ roomToken: v.string(), sessionToken: v.
 export const presenceList = v.array(v.object({ userId: v.string(), online: v.boolean(), lastDisconnected: v.number() }));
 
 const statFields = { calls: v.number(), avgMs: nOrNull, ttftMs: nOrNull, errorRate: nOrNull };
-/** /in-tweet: which game the X card shows (a live one if any, else the latest replay). Slug only. */
-export const featuredResult = v.union(v.null(), v.object({ slug: v.string(), live: v.boolean() }));
 export const modelsBoard = v.object({
   days: v.number(), from: v.string(),
   totals: v.object({ calls: v.number(), games: v.number(), models: v.number() }),

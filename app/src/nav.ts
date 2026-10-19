@@ -13,4 +13,5 @@ export function useLocation() {
   }, []);
   return loc;
 }
-export const isEmbed = () => new URLSearchParams(location.search).has("embed") || location.pathname === "/in-tweet";
+// Only the per-game card (/g/{slug}?embed=1) is a compact embed. /in-tweet is the regular app (see App.tsx).
+export const isEmbed = () => new URLSearchParams(location.search).has("embed");
